@@ -1,0 +1,3 @@
+INDEX VERSION 1.126+E:\0791080\programs\DreamWare\.metadata\.plugins\org.eclipse.jdt.core
+1765007032.index
+2239131249.index

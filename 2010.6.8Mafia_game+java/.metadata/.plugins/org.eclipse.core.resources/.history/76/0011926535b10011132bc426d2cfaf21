@@ -1,0 +1,109 @@
+package dowan.android.Server;
+
+
+import java.awt.Container;
+import java.awt.FlowLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.io.BufferedWriter;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.io.OutputStreamWriter;
+import java.io.PrintWriter;
+import java.net.InetAddress;
+import java.net.Socket;
+import java.net.UnknownHostException;
+
+import javax.swing.JFrame;
+import javax.swing.JScrollPane;
+import javax.swing.JTextArea;
+import javax.swing.JTextField;
+import javax.swing.ScrollPaneConstants;
+
+//�곥깵�껁깉��꺀�ㅳ궋�녈깉
+class ChatClient extends JFrame implements ActionListener {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+	// 鸚됪빊
+	private JTextArea edtView;// 烏①ㅊ�녴궘�밤깉�뺛궍�쇈꺂��
+	private JTextField edtSend;// �곦에�녴궘�밤깉�뺛궍�쇈꺂��
+	private Socket socket; // �썬궞�껁깉
+	private InputStream in; // �ε뒟�밤깉�ゃ꺖��
+
+	// �▲궎��
+	public static void main(String[] args) {
+		ChatClient client = new ChatClient();
+		client.setVisible(true);
+		client.connect("172.22.38.37", 6001);
+	}
+	// �녈꺍�밤깉�⒲궚��
+	public ChatClient() {
+		// �삯씊
+		setSize(300, 300);
+		Container pane = getContentPane();
+		pane.setLayout(new FlowLayout());
+
+		// �▲긿�삠꺖�멥깇��궧�덀깢�ｃ꺖�ャ깋
+		edtView = new JTextArea("", 10, 25);
+		edtView.setEditable(false);
+		pane.add(new JScrollPane(edtView,
+				ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS,
+				ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER));//潁╉궧��꺆�モ뿃�곫Ø�밤궚��꺂횞
+
+		// �곦에�녴궘�밤깉�뺛궍�쇈꺂��
+		edtSend = new JTextField("", 25);
+		pane.add(edtSend);
+		edtSend.addActionListener(this);
+	}
+
+	// �㏂궚�룔깾�녈궎�쇻꺍�덀겗��릤
+	public void actionPerformed(ActionEvent ae) {
+		try {
+			if (socket != null && socket.isConnected()) {
+				PrintWriter out = new PrintWriter(new BufferedWriter(
+						new OutputStreamWriter(socket.getOutputStream())), true); // �뷴뒟�밤깉�ゃ꺖��
+				out.println(edtSend.getText());
+				out.flush();
+				edtSend.setText("");
+			}
+		} catch (Exception e) {
+		}
+	}
+
+	// �η텥
+	public void connect(String host, int port) {
+		String text;
+		int size;
+		byte[] w = new byte[10240];
+		try {
+			// �η텥
+			InetAddress addr = InetAddress.getByName(host);
+			socket = new Socket(addr, port);
+			in = socket.getInputStream();
+
+			// �쀤에�ャ꺖��
+			while (socket != null && socket.isConnected()) {
+				size = in.read(w);
+				if (size <= 0)
+					continue;
+				text = new String(w, 0, size, "UTF8");
+				edtView.append(text + "\n");
+			}
+		} catch (UnknownHostException e) {
+			System.err.println(e);
+		} catch (IOException e) {
+			System.err.println(e);
+		}
+	}
+
+	// 烏①ㅊ
+	public void append_edtView(String mess) {
+		edtView.append(mess);
+		edtView.setCaretPosition(edtView.getText().length());
+	}
+
+	
+}

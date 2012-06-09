@@ -1,0 +1,159 @@
+package dowan.android.Server;
+
+
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.net.Socket;
+
+import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
+import android.graphics.Color;
+import android.os.Bundle;
+import android.os.Handler;
+import android.view.View;
+import android.view.View.OnClickListener;
+import android.view.Window;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.RelativeLayout;
+import android.widget.TextView;
+
+public class SoketChat extends Activity implements OnClickListener {
+    private final static String BR=//�배죱
+        System.getProperty("line.separator");
+    private final static String IP=//IP�㏂깋�с궧��뙁若�        "172.22.38.37";//
+    
+    private SoketChat current;   //�ャ꺃�녈깉
+    private TextView lblReceive;//�쀤에�⒲깧��    private EditText edtSend;   //�곦에�ⓦ깈�ｃ긿�덀깇��궧��    private Button   btnSend;   //�곦에�쒌궭��    
+    private Socket       socket; //�썬궞�껁깉
+    private InputStream  in;     //�ε뒟�밤깉�ゃ꺖��    private OutputStream out;    //�뷴뒟�밤깉�ゃ꺖�� 
+    private OutputStream out;
+    private EditText edtSend;
+    private Button btnSend;
+    
+    private final Handler handler=new Handler();//�뤵꺍�됥꺀
+    private String txtReceive;//�쀤에�녴궘�밤깉    
+	@Override
+	public void onCreate(Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
+		requestWindowFeature(Window.FEATURE_NO_TITLE);
+        current=this;
+        
+        //�с궎�㏂궑�덀겗�잍닇
+        RelativeLayout layout=new RelativeLayout(this);
+        layout.setBackgroundColor(Color.rgb(255,255,255));
+        setContentView(layout);  
+        
+        //�쀤에�⒲깧�ャ겗�잍닇
+        lblReceive=new TextView(this);
+        lblReceive.setId(1);
+        lblReceive.setText("");
+        lblReceive.setTextSize(16.0f);                  
+        lblReceive.setTextColor(Color.rgb(0,0,0));
+        RelativeLayout.LayoutParams param1=
+            new RelativeLayout.LayoutParams(320,400);
+        lblReceive.setLayoutParams(param1);
+        layout.addView(lblReceive);
+
+        //�곦에�ⓦ깈�ｃ긿�덀깇��궧�덀겗�잍닇
+        edtSend=new EditText(this);
+        edtSend.setId(2);
+        edtSend.setText("",TextView.BufferType.NORMAL);
+        RelativeLayout.LayoutParams param2=
+            new RelativeLayout.LayoutParams(200,50);
+        param2.addRule(RelativeLayout.BELOW,1);
+        edtSend.setLayoutParams(param2);
+        layout.addView(edtSend);        
+        
+        //�곦에�쒌궭�녈겗�잍닇
+        btnSend=new Button(this);
+        btnSend.setText("�곦에");
+        btnSend.setOnClickListener(this);
+        RelativeLayout.LayoutParams param3=
+            new RelativeLayout.LayoutParams(200,50);
+        param3.addRule(RelativeLayout.BELOW,1);
+        param3.addRule(RelativeLayout.RIGHT_OF,2);
+        btnSend.setLayoutParams(param3);
+        layout.addView(btnSend);
+
+        //�밤꺃�껁깋��뵟��        Thread cThread =new Thread(){public void run() {
+            try {
+                connect(IP,6001);
+            } catch (Exception e) {
+            }
+        }; 
+        cThread.start(); 
+
+
+	
+	//�η텥
+    private void connect(String ip,int port) {
+        int size;
+        byte[] w =new byte[10240];        
+        txtReceive="";
+        try {
+            //�썬궞�껁깉�η텥
+            socket=new Socket(ip,port);
+            in =socket.getInputStream();
+            out=socket.getOutputStream();
+            
+            //�쀤에�ャ꺖��            while (socket!=null && socket.isConnected()) {
+                //�뉎꺖�욍겗�쀤에
+                size=in.read(w);
+                if (size<=0) continue;
+                txtReceive=new String(w,0,size,"UTF-8");
+
+                //�뤵꺍�됥꺀�ャ굠�뗣깺�쇈궣�쇈궎�녈궭�뺛궒�쇈궧�띴퐳
+                handler.post(new Runnable(){
+                    public void run() {
+                        //�⒲깧�ャ겦��뻼耶쀥닓瓦썲뒥
+                        lblReceive.setText(
+                            lblReceive.getText()+txtReceive+BR);
+                    }
+                });
+            }finally{};
+        } catch (Exception e) {
+            handler.post(new Runnable(){
+                public void run() {
+                	SoketChat.showDialog(current,"","입력하시오!");
+                }
+            });
+        }
+  
+    //�쒌궭�녈궚�ゃ긿��궎�쇻꺍�덀겗��릤
+    public void onClick(View v) {
+        if (v==btnSend) {
+            try {
+                //�뉎꺖�욍겗�곦에
+                if (socket!=null && socket.isConnected()) {
+                    PrintWriter out = new PrintWriter(new BufferedWriter(
+    						new OutputStreamWriter(socket.getOutputStream())), true);
+    				out.println(edtSend.getText().toString());
+                    out.flush();
+                    edtSend.setText("",TextView.BufferType.NORMAL);
+                }
+            } catch (Exception e) {
+                handler.post(new Runnable(){
+                    public void run() {
+                    	SoketChat.showDialog(current,"","�싦에�ⓦ꺀�쇈겎��");
+                    }
+                });
+            }           
+        }
+    }    
+    
+    //��궎�㏂꺆�겹겗烏①ㅊ
+    public static void showDialog(final Activity activity,String title,String text) {
+        AlertDialog.Builder ad=new AlertDialog.Builder(activity);
+        ad.setTitle(title);
+        ad.setMessage(text);
+        ad.setPositiveButton("OK",new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog,int whichButton) {
+                activity.setResult(Activity.RESULT_OK);
+            }
+        });
+        ad.create();
+        ad.show();
+    }
+}
