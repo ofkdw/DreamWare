@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent" >
+    
+    <TextView 
+        android:id ="@+id/lblReceive"
+        android:text=""
+        android:textSize="16.0f"
+        android:layout_x = "320"
+        android:layout_y= "400" />
+    
+    
+
+</RelativeLayout>
+
+
+
+        lblReceive=new TextView(this);
+        lblReceive.setId(1);
+        lblReceive.setText("");
+        lblReceive.setTextSize(16.0f);                  
+        lblReceive.setTextColor(Color.rgb(0,0,0));
+        RelativeLayout.LayoutParams param1=
+            new RelativeLayout.LayoutParams(320,400);
+        lblReceive.setLayoutParams(param1);
+        layout.addView(lblReceive);
+
+        
+        edtSend=new EditText(this);
+        edtSend.setId(2);
+        edtSend.setText("",TextView.BufferType.NORMAL);
+        RelativeLayout.LayoutParams param2=
+            new RelativeLayout.LayoutParams(200,50);
+        param2.addRule(RelativeLayout.BELOW,1);
+        edtSend.setLayoutParams(param2);
+        layout.addView(edtSend);        
+        
+     
+        btnSend=new Button(this);
+        btnSend.setText("�곦에");
+        btnSend.setOnClickListener(this);
+        RelativeLayout.LayoutParams param3=
+            new RelativeLayout.LayoutParams(200,50);
+        param3.addRule(RelativeLayout.BELOW,1);
+        param3.addRule(RelativeLayout.RIGHT_OF,2);
+        btnSend.setLayoutParams(param3);
+        layout.addView(btnSend);
+
+        

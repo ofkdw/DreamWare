@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent" >
+    
+    <TextView 
+        android:id ="@+id/lblReceive"
+        android:text=""
+        android:textSize="16dp"
+        />
+    
+    <EditText 
+        android:id="@+id/edtSend"
+        android:text=""
+        android:bufferType="normal"
+        
+        android:layout_below="@+id/lblReceive"/>
+	
+    <Button 
+        android:id="@+id/btnSend"
+        android:text="chatting" 
+        android:layout_below="@+id/lblReceive"
+        android:layout_toRightOf="@+id/edtSend" />
+    
+</RelativeLayout>
+       
+     
+        

@@ -1,0 +1,7 @@
+package dowan.android.Server;
+
+import Activity;
+
+public class DreamWare extends Activity {
+
+}

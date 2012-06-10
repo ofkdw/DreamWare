@@ -25,7 +25,7 @@ import android.widget.TextView;
 public class SoketChat extends Activity implements OnClickListener {
     private final static String BR=
         System.getProperty("line.separator");
-    private final static String IP = "172.22.38.37";
+    private final static String IP = "113.198.82.1";
     
     private SoketChat current;   
     private TextView lblReceive;
@@ -44,41 +44,13 @@ public class SoketChat extends Activity implements OnClickListener {
         current=this;
         
        
-        RelativeLayout layout=new RelativeLayout(this);
-        layout.setBackgroundColor(Color.rgb(255,255,255));
-        setContentView(layout); 
+        
+        setContentView(R.layout.soket_main); 
         
         
-        lblReceive=new TextView(this);
-        lblReceive.setId(1);
-        lblReceive.setText("");
-        lblReceive.setTextSize(16.0f);                  
-        lblReceive.setTextColor(Color.rgb(0,0,0));
-        RelativeLayout.LayoutParams param1=
-            new RelativeLayout.LayoutParams(320,400);
-        lblReceive.setLayoutParams(param1);
-        layout.addView(lblReceive);
-
-        
-        edtSend=new EditText(this);
-        edtSend.setId(2);
-        edtSend.setText("",TextView.BufferType.NORMAL);
-        RelativeLayout.LayoutParams param2=
-            new RelativeLayout.LayoutParams(200,50);
-        param2.addRule(RelativeLayout.BELOW,1);
-        edtSend.setLayoutParams(param2);
-        layout.addView(edtSend);        
-        
-     
-        btnSend=new Button(this);
-        btnSend.setText("�곦에");
+        btnSend = (Button)findViewById(R.id.btnSend);
         btnSend.setOnClickListener(this);
-        RelativeLayout.LayoutParams param3=
-            new RelativeLayout.LayoutParams(200,50);
-        param3.addRule(RelativeLayout.BELOW,1);
-        param3.addRule(RelativeLayout.RIGHT_OF,2);
-        btnSend.setLayoutParams(param3);
-        layout.addView(btnSend);
+        
 
         
      
