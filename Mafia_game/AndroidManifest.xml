@@ -20,6 +20,8 @@
         </activity>
         <activity android:name="Login"></activity>
         <activity android:name="Sign_Up"></activity>
+        <activity android:name="Game_chat"></activity>
+        <activity android:name="SoketChat"></activity>
     </application>
 
 </manifest>
