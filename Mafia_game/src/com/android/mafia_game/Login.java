@@ -7,6 +7,7 @@ import android.view.View;
 import android.widget.Button;
 
 public class Login extends Activity {
+	
 
 	/** Called when the activity is first created. */
 	@Override
@@ -23,4 +24,5 @@ public class Login extends Activity {
         	}
         });
 	}
+	
 }

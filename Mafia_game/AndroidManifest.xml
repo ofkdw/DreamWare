@@ -22,6 +22,7 @@
         <activity android:name="Sign_Up"></activity>
         <activity android:name="Game_chat"></activity>
         <activity android:name="SoketChat"></activity>
+        <activity android:name="Gauge"></activity>
     </application>
 
 </manifest>

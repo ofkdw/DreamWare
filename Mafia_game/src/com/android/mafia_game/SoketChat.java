@@ -22,6 +22,9 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 public class SoketChat extends Activity implements OnClickListener {
+	
+	
+	
     private final static String BR=
         System.getProperty("line.separator");
     private final static String IP = "7";
@@ -70,7 +73,7 @@ public class SoketChat extends Activity implements OnClickListener {
         
      
         btnSend=new Button(this);
-        btnSend.setText("ss");
+        btnSend.setText("send");
         btnSend.setOnClickListener(this);
         RelativeLayout.LayoutParams param3=
             new RelativeLayout.LayoutParams(200,50);
@@ -162,5 +165,8 @@ public class SoketChat extends Activity implements OnClickListener {
         });
         ad.create();
         ad.show();
+        
     }
+    
+    
 }
